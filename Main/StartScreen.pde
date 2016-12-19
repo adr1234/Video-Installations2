@@ -19,7 +19,7 @@ class StartScreen {
 
     //Set initial y
     y=200;
-    frameRate(5);
+    frameRate(10);
     background(255);
     fill(0);
     fs=32;
