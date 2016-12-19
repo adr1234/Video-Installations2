@@ -6,7 +6,7 @@ class StartScreen {
     "CLICK BELOW TO SEE", 
     "WHAT I'VE DONE WITH IT!"
   };
-  int fs=32;
+  int fs;
   int cs;
   int x;
   int y;
@@ -17,6 +17,7 @@ class StartScreen {
   PImage p3;
   
   StartScreen() {
+    imageMode(CENTER);
     textAlign(CENTER);
     x=calculateX(s[flag]);
 
@@ -25,16 +26,13 @@ class StartScreen {
     frameRate(10);
     background(255);
     fill(0);
-    fs=32;
+    fs=26;
     textSize(fs);
     cs=calculateCS(fs);
     p1=loadImage("1-01.png");
     p2=loadImage("2-01.png");
     p3=loadImage("3-01.png");
     
-    image(p1,width/2,600);
-    image(p2,width/2,700);
-    image(p3,width/2,800);
   }
 
   void run() {
@@ -51,8 +49,20 @@ class StartScreen {
         i=0;
       }
     }
+    if(flag==6){
+      displayIcon();
+      flag++;
+    }
   }
   
+  void displayIcon(){
+    image(p1,width/2,600);
+    text("Your images", width/2, 650);
+    image(p2,width/2,800);
+    text("Your music", width/2, 850);
+    image(p3,width/2,1000);
+    text("Your text messages", width/2, 1050);
+  }
   int calculateX(String temp) {
     println(temp.length());
     cs=calculateCS(fs);

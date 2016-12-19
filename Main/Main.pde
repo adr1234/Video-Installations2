@@ -8,15 +8,10 @@ WordScreen w;
 int flag=1;
 void setup() {
   fullScreen();
-  imageMode(CENTER);
+  //
   s=new StartScreen();
-  //p=new PhotoScreen();
-  //p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
-  //p.file.loop();
   
-  //m=new MusicScreen();
-  //m.file = new SoundFile(this, "MusicScreen/blip.wav");
-  //w = new WordScreen();
+  
 }
 
 void draw() {
@@ -45,14 +40,21 @@ void startWordCram() {
 void keyPressed(){
   if(key=='1'){
     flag=1;
+    s=new StartScreen();
   }
   else if(key=='2'){
     flag=2;
+    p=new PhotoScreen();
+    p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
+    p.file.loop();
   }
   else if(key=='3'){
     flag=3;
+    m=new MusicScreen();
+    m.file = new SoundFile(this, "MusicScreen/blip.wav");
   }
   else if(key=='4'){
     flag=4;
+    w = new WordScreen();
   }
 }

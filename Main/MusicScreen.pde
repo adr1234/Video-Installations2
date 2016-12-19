@@ -7,6 +7,7 @@ class MusicScreen {
   int maskindex=1;
 
   MusicScreen() {
+    imageMode(CORNER);
     background(0);
     //Loading images
     for (int i=0; i<myimages.length; i++) {

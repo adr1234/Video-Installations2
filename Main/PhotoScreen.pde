@@ -6,7 +6,7 @@ class PhotoScreen {
   SoundFile file;
   int maskindex=1;
   PhotoScreen() {
-
+    imageMode(CORNER);
     background(255);
     //Loading images
     for (int i=0; i<myimages.length; i++) {
