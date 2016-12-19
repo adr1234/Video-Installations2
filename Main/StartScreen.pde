@@ -12,7 +12,10 @@ class StartScreen {
   int y;
   int i=0;
   int flag=0;
-
+  PImage p1;
+  PImage p2;
+  PImage p3;
+  
   StartScreen() {
     textAlign(CENTER);
     x=calculateX(s[flag]);
@@ -25,6 +28,13 @@ class StartScreen {
     fs=32;
     textSize(fs);
     cs=calculateCS(fs);
+    p1=loadImage("1-01.png");
+    p2=loadImage("2-01.png");
+    p3=loadImage("3-01.png");
+    
+    image(p1,width/2,600);
+    image(p2,width/2,700);
+    image(p3,width/2,800);
   }
 
   void run() {
@@ -52,4 +62,6 @@ class StartScreen {
   int calculateCS(int fontsize) {
     return fontsize-fontsize/7;
   }
+  
+  
 }
