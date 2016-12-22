@@ -2,7 +2,6 @@ class PhotoScreen {
   MyImage[] myimages= new MyImage[16];
   int index=1;
   PImage mask[];
-  import processing.sound.*;
   SoundFile file;
   int maskindex=1;
   PhotoScreen() {

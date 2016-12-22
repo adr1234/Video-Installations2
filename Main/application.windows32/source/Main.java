@@ -5,6 +5,7 @@ import processing.opengl.*;
 
 import processing.sound.*; 
 import wordcram.*; 
+import http.requests.*; 
 import processing.sound.*; 
 import processing.sound.*; 
 
@@ -35,23 +36,31 @@ public class Main extends PApplet {
 
 
 
+
 StartScreen s;
 PhotoScreen p;
 MusicScreen m;
 WordScreen w;
 int flag=1;
-
 int x=230, y1=550, y2=750, y3=950, wi=300, hi=150;
-
+Data d;
+String str;
 public void setup() {
   
   s=new StartScreen();
+  s.file = new SoundFile(this, "typing-medium-01.wav");
+  s.file.play();
+  //d=new Data();
+  //d.loadData();
+  //d.loadString();
+  
+ // flag=0;
 }
 
 public void draw() {
   switch(flag) {
   case 1: 
-    s.run();
+    s.run(); 
     break;
   case 2: 
     p.run();
@@ -63,7 +72,7 @@ public void draw() {
     w.run();
     break;
   }
-  
+
   //drawButtons();
 }
 
@@ -71,6 +80,7 @@ public void startWordCram() {
 
   new WordCram(this)
     .fromTextFile("WordScreen/Story.txt")
+    //.fromTextString(str)
     //.withFont(createFont("Firestarter Z.otf", 1))
     .sizedByWeight(10, 90)
     .withColors(color(random(255), random(255), random(255)), color(random(255), random(255), random(255)), color(random(255), random(255), random(255)))
@@ -81,17 +91,19 @@ public void keyPressed() {
   if (key=='1') {
     flag=1;
     s=new StartScreen();
+    s.file = new SoundFile(this, "typing-medium-01.wav");
+    s.file.play();
     redraw();
   } else if (key=='2') {
     flag=2;
     p=new PhotoScreen();
-    p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
-    p.file.loop();
+    //p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
+    //p.file.loop();
     redraw();
   } else if (key=='3') {
     flag=3;
     m=new MusicScreen();
-    m.file = new SoundFile(this, "MusicScreen/blip.wav");
+    //m.file = new SoundFile(this, "MusicScreen/blip.wav");
     redraw();
   } else if (key=='4') {
     flag=4;
@@ -100,19 +112,19 @@ public void keyPressed() {
   }
 }
 //void mouseMoved() {
-  //text(mouseX+","+mouseY, mouseX, mouseY);
+//text(mouseX+","+mouseY, mouseX, mouseY);
 //}
 public void mousePressed() {
   if ((mouseX>x)&&(mouseX<x+wi)&&(mouseY>y1)&&(mouseY<y1+hi)) {
     flag=2;
     p=new PhotoScreen();
-    p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
-    p.file.loop();
+    //p.file = new SoundFile(this, "PhotoScreen/sound13.wav");
+    //p.file.loop();
     redraw();
   } else if ((mouseX>x)&&(mouseX<x+wi)&&(mouseY>y2)&&(mouseY<y2+hi)) {
     flag=3;
     m=new MusicScreen();
-    m.file = new SoundFile(this, "MusicScreen/blip.wav");
+    //m.file = new SoundFile(this, "MusicScreen/blip.wav");
     redraw();
   } else if ((mouseX>x)&&(mouseX<x+wi)&&(mouseY>y3)&&(mouseY<y3+hi)) {
     flag=4;
@@ -130,13 +142,80 @@ public void drawButtons() {
   fill(0);
   stroke(0);
 }
+class Data {
+  GetRequest get;
+  JSONObject response;
+  JSONArray users;
+  int number_of_users;
 
+  JSONArray MusicArtist[];
+  JSONArray sms[];
+  JSONArray answers[];
+  JSONArray photo[];
+  String id[];
+  JSONArray Apps[];
+  Data() {
+    get = new GetRequest("http://104.162.96.94:7890/users");
+    get.send();
+    response=parseJSONObject(get.getContent());
+    users=response.getJSONArray("users");
+    //println(users.getJSONObject(0).getJSONArray("answers"));
+
+    if (response!=null) {
+      number_of_users=response.getJSONArray("users").size();
+    }
+    println(number_of_users);
+    //println(response.getJSONArray("users").getJSONObject(0).getJSONArray("photos"));
+    if (number_of_users>0) {
+      //MusicArtist=new JSONArray[number_of_users];
+      answers=new JSONArray[number_of_users];
+      //sms=new JSONArray[number_of_users];
+      //photo=new JSONArray[number_of_users];
+      //Apps=new JSONArray[number_of_users];
+    }
+
+    for (int i=0; i<number_of_users; i++) {
+      JSONObject user=users.getJSONObject(i);
+      println(user);
+      JSONArray a=new JSONArray();
+      if(user.getJSONArray("answers").isNull(0)){
+        a=user.getJSONArray("answers");
+      }
+      println(a);
+    }
+  }
+  public void loadData() {
+    for (int i=0; i<number_of_users; i++) {
+      JSONArray a=users.getJSONObject(i).getJSONArray("answers");
+      concat(str, a.toString());
+    }
+    //try {
+    //  for (int i=0; i<number_of_users; i++) {
+    //    MusicArtist[i]=users.getJSONObject(i).getJSONArray("MusicArtist");
+    //    sms[i]=users.getJSONObject(i).getJSONArray("sms");
+    //    answers[i]=users.getJSONObject(i).getJSONArray("answers");
+    //    photo[i]=users.getJSONObject(i).getJSONArray("photo");
+    //    Apps[i]=users.getJSONObject(i).getJSONArray("Apps");
+    //    println(answers[i]);
+    //  }
+    //}catch(NullPointerException ne){
+    //  println("null pointer exception"); 
+    //}
+  }
+  public void loadString() {
+    //for(int i=0;i<number_of_users;i++){
+    //   for(int j=0;j<answers[i].size();j++){
+    //       concat(str," "+answers[i].getString(j));
+    //   }
+    //}
+  }
+}
 class MusicScreen {
   MyImage[] myimages= new MyImage[10];
   int index=1;
   PImage mask[];
   
-  SoundFile file;
+  //SoundFile file;
   int maskindex=1;
 
   MusicScreen() {
@@ -158,7 +237,7 @@ class MusicScreen {
 
   public void run() {
 
-    file.play();
+    
     fill(255, 5);
     rect(0, 0, width, height);
     //Display images
@@ -221,7 +300,6 @@ class PhotoScreen {
   MyImage[] myimages= new MyImage[16];
   int index=1;
   PImage mask[];
-  
   SoundFile file;
   int maskindex=1;
   PhotoScreen() {
@@ -300,6 +378,7 @@ class PhotoScreen {
     }
   }
 }
+
 class StartScreen {
   String s[]={"HI.", 
     "I KNOW YOU.", 
@@ -317,12 +396,15 @@ class StartScreen {
   PImage p1;
   PImage p2;
   PImage p3;
+  SoundFile file;
+  
 
   StartScreen() {
     imageMode(CENTER);
     textAlign(CENTER);
     x=calculateX(s[flag]);
-
+    //file = new SoundFile(this, "typing-medium-01.wav");
+    //file.play();
     //Set initial y
     y=200;
     frameRate(10);
@@ -373,7 +455,7 @@ class StartScreen {
     text("Your text messages", width/2, 1050);
   }
   public int calculateX(String temp) {
-    println(temp.length());
+    //println(temp.length());
     cs=calculateCS(fs);
     return ((width/2)-(temp.length()*cs)/2);
   }

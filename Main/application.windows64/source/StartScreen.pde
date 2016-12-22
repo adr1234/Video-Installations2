@@ -1,3 +1,4 @@
+import processing.sound.*;
 class StartScreen {
   String s[]={"HI.", 
     "I KNOW YOU.", 
@@ -15,12 +16,15 @@ class StartScreen {
   PImage p1;
   PImage p2;
   PImage p3;
+  SoundFile file;
+  
 
   StartScreen() {
     imageMode(CENTER);
     textAlign(CENTER);
     x=calculateX(s[flag]);
-
+    //file = new SoundFile(this, "typing-medium-01.wav");
+    //file.play();
     //Set initial y
     y=200;
     frameRate(10);
@@ -71,7 +75,7 @@ class StartScreen {
     text("Your text messages", width/2, 1050);
   }
   int calculateX(String temp) {
-    println(temp.length());
+    //println(temp.length());
     cs=calculateCS(fs);
     return ((width/2)-(temp.length()*cs)/2);
   }

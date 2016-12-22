@@ -3,7 +3,7 @@ class MusicScreen {
   int index=1;
   PImage mask[];
   import processing.sound.*;
-  SoundFile file;
+  //SoundFile file;
   int maskindex=1;
 
   MusicScreen() {
@@ -25,7 +25,7 @@ class MusicScreen {
 
   void run() {
 
-    file.play();
+    
     fill(255, 5);
     rect(0, 0, width, height);
     //Display images
